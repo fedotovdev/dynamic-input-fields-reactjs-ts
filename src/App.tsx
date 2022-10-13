@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ChangeEvent, FC, useState } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App: FC = () => {
+    const [inputList, setInputList] = useState<string[]>([''])
+
+    const addInput = () => setInputList([...inputList, ''])
+
+    const removeInput = (index: number) => {
+        const list = [...inputList]
+        list.splice(index, 1)
+        setInputList(list)
+    }
+
+    const handleChange = (event: ChangeEvent<HTMLInputElement>, index: number) => {
+        const list = [...inputList]
+        list[index] = event.target.value
+        setInputList(list)
+    }
+
+    return (
+        <div>
+            {inputList.map((input, index) => (
+                <div key={index}>
+                    <input value={input} onChange={(event) => handleChange(event, index)} type='text' placeholder='Enter value: ' />
+                    <button onClick={addInput}>+</button>
+                    {inputList.length > 1 ? <button onClick={() => removeInput(index)}>-</button> : null}
+                </div>
+            ))}
+        </div>
+    )
 }
 
-export default App;
+export default App
